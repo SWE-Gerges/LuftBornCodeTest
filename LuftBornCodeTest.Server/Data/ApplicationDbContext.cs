@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LuftBornCodeTest.Server.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace LuftBornCodeTest.Server.Data
 {
@@ -8,5 +9,7 @@ namespace LuftBornCodeTest.Server.Data
         {
             
         }
+
+        public DbSet<Publisher> Publishers { get; set; }
     }
 }
