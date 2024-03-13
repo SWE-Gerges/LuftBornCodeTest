@@ -1,4 +1,5 @@
 ﻿
+using LuftBornCodeTest.Server.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,18 +10,19 @@ namespace LuftBornCodeTest.Server.Controllers
     [ApiController]
     public class PublishersController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPublishersService _publishersService;
 
 
-        public PublishersController(ApplicationDbContext context)
+        public PublishersController(IPublishersService publishersService)
         {
-            _context = context;
+           
+            _publishersService = publishersService;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var publishers = await _context.Publishers.OrderBy(p => p.Name).ToListAsync();
+            var publishers = await _publishersService.GetAll();
 
             return Ok(publishers);
         }
@@ -32,17 +34,17 @@ namespace LuftBornCodeTest.Server.Controllers
             {
                 Name = createPublisherDto.Name
             };
-            await _context.Publishers.AddAsync(publisher);
-            _context.SaveChanges();
+            await _publishersService.Add(publisher);
+            
 
             return Ok(publisher);
         }
 
         [HttpPut("{id}")]
 
-        public async Task<IActionResult> UpdateAsync(int Id, [FromBody] PublisherDto publisherDto)
-        { 
-            var publisher = await _context.Publishers.SingleOrDefaultAsync(p => p.Id == Id);
+        public async Task<IActionResult> UpdateAsync(byte Id, [FromBody] PublisherDto publisherDto)
+        {
+            var publisher = await _publishersService.FindById(Id);
             if(publisher == null)
             {
                 return NotFound($"No Publisher was found with ID: {Id}");
@@ -50,22 +52,21 @@ namespace LuftBornCodeTest.Server.Controllers
 
             publisher.Name = publisherDto.Name;
 
-            _context.SaveChanges();
+            _publishersService.Update(publisher);
 
             return Ok(publisher);
         }
 
         [HttpDelete("{id}")]
 
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(byte id)
         {
-            var publisher = await _context.Publishers.SingleOrDefaultAsync(p => p.Id ==id);
+            var publisher = await _publishersService.FindById(id);
             if(publisher == null)
             {
                 return NotFound($"No Publisher was found with ID: {id}");
             }
-            _context.Publishers.Remove(publisher);
-            _context.SaveChanges();
+            _publishersService.Remove(publisher);
             return Ok();
         }
     }

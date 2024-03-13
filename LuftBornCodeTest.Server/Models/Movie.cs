@@ -13,7 +13,14 @@ namespace LuftBornCodeTest.Server.Models
         public string Description { get; set; }
 
         public string Category { get; set; }
-       
+
+        public double Rate { get; set; }
+
+        public byte[] Poster { get; set; }
+        public byte PublisherId { get; set; }
+
+        public Publisher publisher { get; set; }
+
 
     }
 }

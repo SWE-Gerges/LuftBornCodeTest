@@ -11,5 +11,6 @@ namespace LuftBornCodeTest.Server.Data
         }
 
         public DbSet<Publisher> Publishers { get; set; }
+        public DbSet<Movie> Movies { get; set; }
     }
 }
