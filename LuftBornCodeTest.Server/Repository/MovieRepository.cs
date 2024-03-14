@@ -2,15 +2,15 @@
 using LuftBornCodeTest.Server.Dtos;
 using Microsoft.EntityFrameworkCore;
 
-namespace LuftBornCodeTest.Server.Services
+namespace LuftBornCodeTest.Server.Repository
 {
-    public class MoviesService : IMoviesService
+    public class MovieRepository : IRepository<Movie>
     {
         private readonly ApplicationDbContext _context;
 
        
 
-        public MoviesService(ApplicationDbContext context)
+        public MovieRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -53,6 +53,9 @@ namespace LuftBornCodeTest.Server.Services
             return movie;
         }
 
-      
+        public Task<Movie> FindById(byte id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

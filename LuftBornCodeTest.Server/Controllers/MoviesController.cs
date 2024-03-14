@@ -1,4 +1,4 @@
-﻿using LuftBornCodeTest.Server.Services;
+﻿
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,30 +8,30 @@ namespace LuftBornCodeTest.Server.Controllers
     [ApiController]
     public class MoviesController : ControllerBase
     {
-        private readonly IMoviesService _moviesService;
+        private readonly IRepository<Movie> _movieRepository;
 
 
         string _allowedExtentions = FileSettings.allowedExtentions;
         int _maxFileSize = FileSettings.maxFileSizeByte;
 
 
-        public MoviesController(IMoviesService moviesService)
+        public MoviesController(IRepository<Movie> movieRepository)
         {
-            _moviesService = moviesService;
+            _movieRepository = movieRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            var movies = await _moviesService.GetAll();
+            var movies = await _movieRepository.GetAll();
             return Ok(movies);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{Id}")]
 
-        public async Task<IActionResult>GetByIdAsync(int id)
+        public async Task<IActionResult>GetByIdAsync(int Id)
         {
-            var movie = await _moviesService.FindById(id);
+            var movie = await _movieRepository.FindById(Id);
             if(movie == null) { return NotFound(); }
 
             return Ok(movie);
@@ -71,18 +71,18 @@ namespace LuftBornCodeTest.Server.Controllers
 
             };
 
-           await _moviesService.Add(movie);
+           await _movieRepository.Add(movie);
             return Ok(movie);
 
         }
 
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id,[FromForm] MovieDto movieDto)
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> UpdateAsync(int Id, [FromForm] MovieDto movieDto)
         {
 
-            var movie = await _moviesService.FindById(id);
-            if (movie == null) { return NotFound($"Error: Movie not found with ID: {id}");  }
+            var movie = await _movieRepository.FindById(Id);
+            if (movie == null) { return NotFound($"Error: Movie not found with ID: {Id}");  }
             #region ValidatePosterExtentionAndSize
 
 
@@ -104,17 +104,17 @@ namespace LuftBornCodeTest.Server.Controllers
             #endregion
 
 
-            _moviesService.Update(movie);
+            _movieRepository.Update(movie);
             return Ok(movie);
 
         }
           
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteAsync(int Id)
         {
-            var movie = await _moviesService.FindById(id);
-            if (movie == null) return NotFound($"No movie found with ID: {id}");
-             _moviesService.Remove(movie);
+            var movie = await _movieRepository.FindById(Id);
+            if (movie == null) return NotFound($"No movie found with ID: {Id}");
+             _movieRepository.Remove(movie);
 
             return Ok(movie);
         }

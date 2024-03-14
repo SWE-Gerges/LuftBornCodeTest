@@ -4,13 +4,13 @@
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 
-namespace LuftBornCodeTest.Server.Services
+namespace LuftBornCodeTest.Server.Repository
 {
-    public class PublishersService : IPublishersService
+    public class PublisherRepository : IRepository<Publisher>
     {
         private readonly ApplicationDbContext _context;
 
-        public PublishersService(ApplicationDbContext context)
+        public PublisherRepository(ApplicationDbContext context)
         {
             _context = context;
         }
@@ -53,6 +53,9 @@ namespace LuftBornCodeTest.Server.Services
             return publisher;
         }
 
-        
+        public Task<Publisher> FindById(int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
