@@ -43,6 +43,7 @@ namespace LuftBornCodeTest.Server.Controllers
 
             if (movieDto.Poster == null)
                 return BadRequest("Error: Poster is required");
+
             #region ValidatePosterExtentionAndSize
 
 
@@ -83,6 +84,7 @@ namespace LuftBornCodeTest.Server.Controllers
 
             var movie = await _movieRepository.FindById(Id);
             if (movie == null) { return NotFound($"Error: Movie not found with ID: {Id}");  }
+
             #region ValidatePosterExtentionAndSize
 
 
